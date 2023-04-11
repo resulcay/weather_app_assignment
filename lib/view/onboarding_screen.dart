@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Text("Hello"),
+        child: ElevatedButton(
+            onPressed: () {
+              context.go('/auth/sign-in');
+            },
+            child: const Text("data")),
       ),
     );
   }
