@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:weather_app_assignment/services/cache_service.dart';
+import 'package:weather_app_assignment/view/sign_in_screen.dart';
+import 'package:weather_app_assignment/view/weather_screen.dart';
 
-class OnboardingScreen extends StatelessWidget {
+class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
   @override
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends State<OnboardingScreen> {
+  bool checkUserStatus() {
+    final cacheInstance = CacheManager.instance;
+    String secretWord = cacheInstance.getStringValue(PreferencesKeys.TOKEN);
+    secretWord = secretWord.trim();
+
+    if (secretWord.isEmpty) return true;
+
+    return false;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-            onPressed: () {
-              context.go('/auth/sign-in');
-            },
-            child: const Text("data")),
-      ),
-    );
+    return checkUserStatus() ? const WeatherScreen() : const SignInScreen();
   }
 }

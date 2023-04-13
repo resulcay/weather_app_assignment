@@ -8,27 +8,39 @@ class _LaunchConfiguration {
           builder: (context, state) => const OnboardingScreen(),
           routes: [
             GoRoute(
-              path: 'auth/sign-up',
-              builder: (context, state) => const SignUpScreen(),
-            ),
-            GoRoute(
-              path: 'auth/sign-in',
+              path: 'sign-in',
               builder: (context, state) => const SignInScreen(),
             ),
+            GoRoute(
+              path: 'sign-up',
+              builder: (context, state) => const SignUpScreen(),
+            ),
           ]),
+      GoRoute(
+          path: '/weather',
+          builder: (context, state) => const WeatherScreen(),
+          routes: [
+            GoRoute(
+              path: 'detail',
+              builder: (context, state) => const WeatherDetailScreen(),
+            ),
+          ])
     ],
   );
 
   static configure() async {
     WidgetsFlutterBinding.ensureInitialized();
     await EasyLocalization.ensureInitialized();
-
+    CacheManager.prefrencesInit();
     runApp(
       EasyLocalization(
-          supportedLocales: const [LocaleConstant.engLocale],
-          path: LocaleConstant.TRANSLATION_PATH,
-          fallbackLocale: LocaleConstant.engLocale,
-          child: const MyApp()),
+        supportedLocales: const [LocaleConstant.engLocale],
+        path: LocaleConstant.TRANSLATION_PATH,
+        fallbackLocale: LocaleConstant.engLocale,
+        child: const ProviderScope(
+          child: MyApp(),
+        ),
+      ),
     );
   }
 

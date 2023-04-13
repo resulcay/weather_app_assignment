@@ -1,49 +1,38 @@
+import 'dart:io';
 
-// abstract class IExerciseService {
-//   IExerciseService(this.dio);
-//   final Dio dio;
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:weather_app_assignment/providers/loading_indicator_provider.dart';
+import '../models/region_model.dart';
 
-//   Future<List<ExerciseModel>?> fetchExerciseItems(
-//     BuildContext context, {
-//     String? nameFilter,
-//     String? muscleFilter,
-//     String? typeFilter,
-//   });
-// }
+abstract class IRegionService extends LoadingIndicatorProvider {
+  IRegionService(this.dio);
+  final Dio dio;
 
-// class ExerciseService extends IExerciseService with ChangeNotifier {
-//   ExerciseService(super.dio);
-//   @override
-//   Future<List<ExerciseModel>?> fetchExerciseItems(
-//     BuildContext context, {
-//     String? nameFilter,
-//     String? muscleFilter,
-//     String? typeFilter,
-//   }) async {
-//     Provider.of<IsLoadingProvider>(context, listen: false).isLoading = true;
+  Future<List<RegionModel>?> fetchRegions(BuildContext context, String filter);
+}
 
-//     String baseUrlCompleter =
-//         '?type=${typeFilter ?? ''}&muscle=${muscleFilter ?? ''}&name=${nameFilter ?? ''}';
-//     final response = await dio.get(
-//       baseUrlCompleter,
-//       options: Options(
-//         headers: ConstantAppApiKey.apiKeyMap,
-//       ),
-//     );
+class RegionService extends IRegionService {
+  RegionService(super.dio);
 
-//     if (response.statusCode == HttpStatus.ok) {
-//       final jsonBody = response.data;
+  bool loading = false;
+  @override
+  Future<List<RegionModel>?> fetchRegions(
+    BuildContext? context,
+    String filter,
+  ) async {
+    state = true;
+    final response = await dio.get(filter);
+    if (response.statusCode == HttpStatus.ok) {
+      final jsonBody = response.data;
+      if (jsonBody is List) {
+        state = false;
+        List<RegionModel> value =
+            jsonBody.map((e) => RegionModel.fromMap(e)).toList();
 
-//       if (jsonBody is List) {
-//         Provider.of<IsLoadingProvider>(context, listen: false)
-//             .changeLoadingState(false);
-//         notifyListeners();
-
-//         List<ExerciseModel> value =
-//             jsonBody.map((e) => ExerciseModel.fromMap(e)).toList();
-//         return value;
-//       }
-//     }
-//     return null;
-//   }
-// }
+        return value;
+      }
+    }
+    return null;
+  }
+}
