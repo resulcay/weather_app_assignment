@@ -16,9 +16,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     String secretWord = cacheInstance.getStringValue(PreferencesKeys.TOKEN);
     secretWord = secretWord.trim();
 
-    if (secretWord.isEmpty) return true;
+    if (secretWord.isEmpty) return false;
 
-    return false;
+    return true;
   }
 
   @override

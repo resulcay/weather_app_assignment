@@ -3,9 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weather_app_assignment/extensions/media_query_extension.dart';
 import 'package:weather_app_assignment/extensions/padding_extension.dart';
 import 'package:weather_app_assignment/main.dart';
-import 'package:weather_app_assignment/models/region_model.dart';
-import 'package:weather_app_assignment/providers/loading_indicator_provider.dart';
-import 'package:weather_app_assignment/providers/region_provider.dart';
 
 import '../components/weather_card.dart';
 import '../services/dio_service.dart';
